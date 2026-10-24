@@ -1,0 +1,40 @@
+{% extends "base/base.html" %}
+
+{% block title %}Reporte - {{ report.target_organization }}{% endblock %}
+
+{% block content %}
+<nav class="bg-gray-900 border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+            <div class="flex items-center space-x-4">
+                <a href="/dashboard" class="text-xl font-bold text-white">🛡️ Shadow IT Finder</a>
+                <span class="text-gray-600">/</span>
+                <span class="text-gray-300">Reporte</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="/dashboard" class="text-sm text-gray-400 hover:text-white">← Volver al Dashboard</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-6 flex justify-between items-start">
+        <div>
+            <h1 class="text-2xl font-bold text-white mb-2">Auditoría - {{ report.target_organization }}</h1>
+            <p class="text-gray-400">Creado el {{ report.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+        </div>
+        <div class="flex space-x-3">
+            <a href="/reports/{{ report.id }}/download/md" class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-sm font-medium">Descargar .MD</a>
+            <a href="/reports/{{ report.id }}/download/json" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm font-medium">Descargar .JSON</a>
+        </div>
+    </div>
+    
+    <div class="bg-gray-900 rounded-lg border border-gray-800 p-6">
+        <div class="prose prose-invert max-w-none">
+            <p class="text-gray-300">El reporte completo se encuentra en los archivos descargables.</p>
+            <p class="text-gray-400 text-sm mt-4">Usa los botones de arriba para descargar el informe en formato Markdown o JSON.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
