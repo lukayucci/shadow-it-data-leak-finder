@@ -1,0 +1,67 @@
+{% extends "base/base.html" %}
+
+{% block title %}ZERO | Authentication{% endblock %}
+
+{% block content %}
+<div class="relative min-h-screen flex items-center justify-center overflow-hidden px-4">
+    <div class="grid-bg"></div>
+    <div class="scanlines"></div>
+    
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-500/5 blur-[120px]"></div>
+    
+    <div class="relative z-10 w-full max-w-md">
+        <div class="text-center mb-10 fade-in-up">
+            <a href="/">
+                <h1 class="logo-zero text-5xl mb-3 tracking-[0.4em]">ZERO</h1>
+            </a>
+            <div class="flex items-center justify-center gap-2 text-[10px] font-mono text-[#8b9bb4] tracking-[0.4em] uppercase">
+                <span>SECURE ACCESS</span>
+            </div>
+        </div>
+        
+        <div class="panel-zero rounded-lg p-8 fade-in-up-delay-1 relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-50"></div>
+            
+            {% if error %}
+            <div class="mb-6 p-3 bg-red-500/10 border border-red-500/40 rounded text-red-400 text-xs font-mono">
+                [ERROR] {{ error }}
+            </div>
+            {% endif %}
+            
+            {% if success %}
+            <div class="mb-6 p-3 bg-emerald-500/10 border border-emerald-500/40 rounded text-emerald-400 text-xs font-mono">
+                [SUCCESS] {{ success }}
+            </div>
+            {% endif %}
+            
+            <form method="POST" action="/login" class="space-y-5">
+                <div>
+                    <label class="block text-[10px] font-mono text-[#8b9bb4] mb-2 tracking-[0.2em] uppercase">IDENTIFIER</label>
+                    <input type="email" name="email" required autocomplete="email" placeholder="user@domain.io"
+                           class="input-zero w-full px-4 py-2.5 rounded text-sm">
+                </div>
+                
+                <div>
+                    <label class="block text-[10px] font-mono text-[#8b9bb4] mb-2 tracking-[0.2em] uppercase">ACCESS KEY</label>
+                    <input type="password" name="password" required autocomplete="current-password" placeholder="••••••••"
+                           class="input-zero w-full px-4 py-2.5 rounded text-sm">
+                </div>
+                
+                <button type="submit" class="btn-zero w-full relative mt-6">
+                    <span class="relative z-10">AUTHENTICATE</span>
+                </button>
+            </form>
+            
+            <div class="mt-6 pt-6 border-t border-[rgba(0,170,255,0.15)] text-center">
+                <a href="/register" class="text-xs text-[#8b9bb4] hover:text-cyan-400 transition-colors font-mono tracking-wider">
+                    [ CREATE ACCOUNT ]
+                </a>
+            </div>
+        </div>
+        
+        <div class="text-center mt-6 text-[9px] font-mono text-[#4a5d7a] tracking-[0.3em]">
+            ENCRYPTED CONNECTION
+        </div>
+    </div>
+</div>
+{% endblock %}

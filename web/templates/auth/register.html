@@ -1,0 +1,80 @@
+{% extends "base/base.html" %}
+
+{% block title %}ZERO | Registration{% endblock %}
+
+{% block content %}
+<div class="relative min-h-screen flex items-center justify-center overflow-hidden px-4 py-12">
+    <div class="grid-bg"></div>
+    <div class="scanlines"></div>
+    
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-500/5 blur-[120px]"></div>
+    
+    <div class="relative z-10 w-full max-w-md">
+        <div class="text-center mb-10 fade-in-up">
+            <a href="/">
+                <h1 class="logo-zero text-5xl mb-3 tracking-[0.4em]">ZERO</h1>
+            </a>
+            <div class="flex items-center justify-center gap-2 text-[10px] font-mono text-[#8b9bb4] tracking-[0.4em] uppercase">
+                <span>NEW OPERATOR</span>
+            </div>
+        </div>
+        
+        <div class="panel-zero rounded-lg p-8 fade-in-up-delay-1 relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-50"></div>
+            
+            {% if error %}
+            <div class="mb-6 p-3 bg-red-500/10 border border-red-500/40 rounded text-red-400 text-xs font-mono">
+                [ERROR] {{ error }}
+            </div>
+            {% endif %}
+            
+            <form method="POST" action="/register" class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-mono text-[#8b9bb4] mb-2 tracking-[0.2em] uppercase">EMAIL</label>
+                    <input type="email" name="email" required placeholder="operator@domain.io"
+                           class="input-zero w-full px-4 py-2.5 rounded text-sm">
+                </div>
+                
+                <div>
+                    <label class="block text-[10px] font-mono text-[#8b9bb4] mb-2 tracking-[0.2em] uppercase">HANDLE</label>
+                    <input type="text" name="username" required placeholder="callsign"
+                           class="input-zero w-full px-4 py-2.5 rounded text-sm">
+                </div>
+                
+                <div>
+                    <label class="block text-[10px] font-mono text-[#8b9bb4] mb-2 tracking-[0.2em] uppercase">FULL NAME [OPTIONAL]</label>
+                    <input type="text" name="full_name" placeholder="real identity"
+                           class="input-zero w-full px-4 py-2.5 rounded text-sm">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[10px] font-mono text-[#8b9bb4] mb-2 tracking-[0.2em] uppercase">KEY</label>
+                        <input type="password" name="password" required minlength="6" placeholder="••••••••"
+                               class="input-zero w-full px-4 py-2.5 rounded text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-mono text-[#8b9bb4] mb-2 tracking-[0.2em] uppercase">VERIFY</label>
+                        <input type="password" name="confirm_password" required minlength="6" placeholder="••••••••"
+                               class="input-zero w-full px-4 py-2.5 rounded text-sm">
+                    </div>
+                </div>
+                
+                <div class="p-3 bg-cyan-500/5 border border-cyan-500/30 rounded text-[10px] font-mono text-cyan-400">
+                    [INIT] 3 SCAN CREDITS ALLOCATED
+                </div>
+                
+                <button type="submit" class="btn-zero w-full relative mt-4">
+                    <span class="relative z-10">INITIALIZE</span>
+                </button>
+            </form>
+            
+            <div class="mt-6 pt-6 border-t border-[rgba(0,170,255,0.15)] text-center">
+                <a href="/login" class="text-xs text-[#8b9bb4] hover:text-cyan-400 transition-colors font-mono tracking-wider">
+                    [ BACK TO AUTH ]
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
