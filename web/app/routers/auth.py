@@ -15,11 +15,14 @@ from web.app.models.user import User
 router = APIRouter()
 templates = Jinja2Templates(directory=str(settings.TEMPLATES_DIR))
 
+from web.app.core.limiter import limiter
+
 @router.get("/login")
 async def login_page(request: Request):
     return templates.TemplateResponse(request, "auth/login.html")
 
 @router.post("/login")
+@limiter.limit("10/minute")
 async def login(request: Request, response: Response, email: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == email).first()
     if not user or not verify_password(password, user.hashed_password):
@@ -28,7 +31,15 @@ async def login(request: Request, response: Response, email: str = Form(...), pa
         return templates.TemplateResponse(request, "auth/login.html", {"error": "Account disabled"})
     access_token = create_access_token(data={"sub": str(user.id)}, expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
     resp = RedirectResponse(url="/dashboard", status_code=302)
-    resp.set_cookie(key="access_token", value=access_token, httponly=True, max_age=settings.SESSION_MAX_AGE, samesite="lax")
+    resp.set_cookie(
+        key="access_token",
+        value=access_token,
+        httponly=True,
+        secure=settings.SECURE_COOKIES,
+        max_age=settings.SESSION_MAX_AGE,
+        samesite="lax",
+        path="/",
+    )
     return resp
 
 @router.get("/register")
@@ -36,6 +47,7 @@ async def register_page(request: Request):
     return templates.TemplateResponse(request, "auth/register.html")
 
 @router.post("/register")
+@limiter.limit("5/minute")
 async def register(request: Request, email: str = Form(...), username: str = Form(...), full_name: str = Form(""), password: str = Form(...), confirm_password: str = Form(...), db: Session = Depends(get_db)):
     if password != confirm_password:
         return templates.TemplateResponse(request, "auth/register.html", {"error": "Passwords do not match"})

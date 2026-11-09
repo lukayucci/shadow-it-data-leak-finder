@@ -1,40 +1,155 @@
 {% extends "base/base.html" %}
 
-{% block title %}Reporte - {{ report.target_organization }}{% endblock %}
+{% block title %}ZERO | Report - {{ report.target_organization }}{% endblock %}
+
+{% block extra_head %}
+<style>
+    html, body {
+        height: auto !important;
+        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto !important;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<nav class="bg-gray-900 border-b border-gray-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 items-center">
-            <div class="flex items-center space-x-4">
-                <a href="/dashboard" class="text-xl font-bold text-white">🛡️ Shadow IT Finder</a>
-                <span class="text-gray-600">/</span>
-                <span class="text-gray-300">Reporte</span>
-            </div>
-            <div class="flex items-center space-x-4">
-                <a href="/dashboard" class="text-sm text-gray-400 hover:text-white">← Volver al Dashboard</a>
-            </div>
-        </div>
-    </div>
-</nav>
-
-<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="mb-6 flex justify-between items-start">
-        <div>
-            <h1 class="text-2xl font-bold text-white mb-2">Auditoría - {{ report.target_organization }}</h1>
-            <p class="text-gray-400">Creado el {{ report.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
-        </div>
-        <div class="flex space-x-3">
-            <a href="/reports/{{ report.id }}/download/md" class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-sm font-medium">Descargar .MD</a>
-            <a href="/reports/{{ report.id }}/download/json" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm font-medium">Descargar .JSON</a>
-        </div>
-    </div>
+<div class="min-h-screen relative">
+    <div class="grid-bg"></div>
+    <div class="scanlines"></div>
     
-    <div class="bg-gray-900 rounded-lg border border-gray-800 p-6">
-        <div class="prose prose-invert max-w-none">
-            <p class="text-gray-300">El reporte completo se encuentra en los archivos descargables.</p>
-            <p class="text-gray-400 text-sm mt-4">Usa los botones de arriba para descargar el informe en formato Markdown o JSON.</p>
+    <!-- Nav -->
+    <nav class="relative z-20 border-b border-[rgba(0,170,255,0.2)] bg-black/40 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-14 md:h-16 items-center gap-2">
+                <div class="flex items-center gap-2 md:gap-3 min-w-0">
+                    <a href="/dashboard" class="flex items-center gap-2">
+                        <img src="/static/img/zero-logo.png" alt="ZERO" class="w-7 h-7 md:w-8 md:h-8">
+                        <span class="logo-zero text-base sm:text-lg md:text-xl tracking-[0.25em] sm:tracking-[0.3em]">ZERO</span>
+                    </a>
+                </div>
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <a href="/dashboard" class="text-[9px] md:text-[10px] font-mono text-[#8b9bb4] hover:text-cyan-400 transition-colors tracking-widest">[DASHBOARD]</a>
+                    <a href="/reports/{{ report.id }}/download/md" class="text-[9px] md:text-[10px] font-mono text-[#8b9bb4] hover:text-cyan-400 transition-colors tracking-widest">[MD]</a>
+                    <a href="/reports/{{ report.id }}/download/json" class="text-[9px] md:text-[10px] font-mono text-[#8b9bb4] hover:text-cyan-400 transition-colors tracking-widest">[JSON]</a>
+                </div>
+            </div>
         </div>
-    </div>
+    </nav>
+    
+    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10 pb-16 md:pb-20">
+        <!-- Header -->
+        <div class="mb-6 md:mb-10 fade-in-up">
+            <div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+                <div class="h-px w-6 md:w-8 bg-gradient-to-r to-cyan-400"></div>
+                <p class="text-[9px] md:text-[10px] font-mono text-cyan-400 tracking-[0.3em] md:tracking-[0.4em] uppercase">Intelligence Report</p>
+            </div>
+            <h1 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-white mb-2 break-words">{{ report.target_organization }}</h1>
+            <p class="text-xs sm:text-sm text-[#8b9bb4] font-mono">SCAN ID: {{ report.id }} • {{ report.created_at.strftime('%Y.%m.%d %H:%M:%S') }}</p>
+            <p class="text-[9px] md:text-[10px] font-mono text-cyan-400/70 mt-2 tracking-widest">PASSIVE EXPOSURE & MISCONFIGURATION ASSESSMENT • 100% VERIFICABLE</p>
+        </div>
+        
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-10 fade-in-up-delay-1">
+            <div class="panel-zero rounded-lg p-4 md:p-6 relative overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500 to-transparent opacity-40"></div>
+                <p class="text-[8px] md:text-[9px] font-mono text-[#8b9bb4] tracking-widest mb-1 md:mb-2">CRITICAL</p>
+                <p class="text-2xl md:text-3xl font-semibold text-red-400">{{ report.critical_count }}</p>
+            </div>
+            <div class="panel-zero rounded-lg p-4 md:p-6 relative overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-40"></div>
+                <p class="text-[8px] md:text-[9px] font-mono text-[#8b9bb4] tracking-widest mb-1 md:mb-2">HIGH</p>
+                <p class="text-2xl md:text-3xl font-semibold text-orange-400">{{ report.high_count }}</p>
+            </div>
+            <div class="panel-zero rounded-lg p-4 md:p-6 relative overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-500 to-transparent opacity-40"></div>
+                <p class="text-[8px] md:text-[9px] font-mono text-[#8b9bb4] tracking-widest mb-1 md:mb-2">MEDIUM</p>
+                <p class="text-2xl md:text-3xl font-semibold text-yellow-400">{{ report.medium_count }}</p>
+            </div>
+            <div class="panel-zero rounded-lg p-4 md:p-6 relative overflow-hidden">
+                <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-40"></div>
+                <p class="text-[8px] md:text-[9px] font-mono text-[#8b9bb4] tracking-widest mb-1 md:mb-2">INFO</p>
+                <p class="text-2xl md:text-3xl font-semibold text-blue-400">{{ report.info_count }}</p>
+            </div>
+        </div>
+        
+        <!-- Findings -->
+        <div class="panel-zero rounded-lg overflow-hidden mb-6 md:mb-10 fade-in-up-delay-2 relative">
+            <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent"></div>
+            <div class="px-4 sm:px-6 py-4 md:py-5 border-b border-[rgba(0,170,255,0.15)]">
+                <div class="flex items-center gap-2 md:gap-3">
+                    <h2 class="text-base md:text-lg font-medium text-white">Findings</h2>
+                    <span class="text-[8px] md:text-[9px] px-2 py-0.5 badge-info font-mono">{{ findings|length }} ITEMS</span>
+                </div>
+            </div>
+            
+            {% if findings %}
+            <div class="divide-y divide-[rgba(0,170,255,0.1)]">
+                {% for finding in findings %}
+                <div class="p-4 sm:p-6 hover:bg-[rgba(0,170,255,0.03)] transition-colors">
+                    <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3 mb-3">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2 mb-2">
+                                {% if finding.severity.value == 'critical' %}
+                                <span class="px-2 py-1 text-[8px] md:text-[9px] font-mono badge-danger">CRITICAL</span>
+                                {% elif finding.severity.value == 'high' %}
+                                <span class="px-2 py-1 text-[8px] md:text-[9px] font-mono bg-orange-500/15 border border-orange-500/40 text-orange-400">HIGH</span>
+                                {% elif finding.severity.value == 'medium' %}
+                                <span class="px-2 py-1 text-[8px] md:text-[9px] font-mono bg-yellow-500/15 border border-yellow-500/40 text-yellow-400">MEDIUM</span>
+                                {% elif finding.severity.value == 'low' %}
+                                <span class="px-2 py-1 text-[8px] md:text-[9px] font-mono bg-blue-500/15 border border-blue-500/40 text-blue-400">LOW</span>
+                                {% else %}
+                                <span class="px-2 py-1 text-[8px] md:text-[9px] font-mono badge-info">INFO</span>
+                                {% endif %}
+                                <span class="text-[9px] md:text-[10px] font-mono text-[#4a5d7a] uppercase">{{ finding.category }}</span>
+                            </div>
+                            <h3 class="text-base md:text-lg font-medium text-white mb-2 break-words">{{ finding.title }}</h3>
+                            <p class="text-xs sm:text-sm text-[#8b9bb4] leading-relaxed">{{ finding.description }}</p>
+                        </div>
+                    </div>
+                    
+                    {% if finding.evidence %}
+                    <div class="mt-4 p-3 md:p-4 bg-black/40 rounded border border-[rgba(0,170,255,0.15)]">
+                        <p class="text-[8px] md:text-[9px] font-mono text-cyan-400 mb-2 tracking-widest">EVIDENCE</p>
+                        <pre class="text-[10px] md:text-xs font-mono text-[#8b9bb4] overflow-x-auto whitespace-pre-wrap break-words">{{ finding.evidence | tojson(indent=2) }}</pre>
+                    </div>
+                    {% endif %}
+                    
+                    {% if finding.get_verification %}
+                    <div class="mt-3 md:mt-4 p-3 md:p-4 bg-emerald-500/5 rounded border border-emerald-500/20">
+                        <p class="text-[8px] md:text-[9px] font-mono text-emerald-400 mb-2 tracking-widest">HOW TO VERIFY MANUALLY</p>
+                        <div class="space-y-2 text-xs sm:text-sm text-[#e6f1ff]">
+                            <p><span class="text-[#8b9bb4]">Method:</span> <code class="text-cyan-400">{{ finding.get_verification.method }}</code></p>
+                            <p><span class="text-[#8b9bb4]">Steps:</span> {{ finding.get_verification.how_to_check }}</p>
+                            <p class="text-[9px] font-mono text-emerald-400">[MANUALLY VERIFIABLE: YES]</p>
+                        </div>
+                    </div>
+                    {% elif finding.verification %}
+                    <div class="mt-3 md:mt-4 p-3 md:p-4 bg-emerald-500/5 rounded border border-emerald-500/20">
+                        <p class="text-[8px] md:text-[9px] font-mono text-emerald-400 mb-2 tracking-widest">HOW TO VERIFY MANUALLY</p>
+                        <div class="space-y-2 text-xs sm:text-sm text-[#e6f1ff]">
+                            <p><span class="text-[#8b9bb4]">Method:</span> <code class="text-cyan-400">{{ finding.verification.method }}</code></p>
+                            <p><span class="text-[#8b9bb4]">Steps:</span> {{ finding.verification.how_to_check }}</p>
+                            <p class="text-[9px] font-mono text-emerald-400">[MANUALLY VERIFIABLE: YES]</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if finding.recommendation %}
+                    <div class="mt-3 md:mt-4 p-3 md:p-4 bg-cyan-500/5 rounded border border-cyan-500/20">
+                        <p class="text-[8px] md:text-[9px] font-mono text-cyan-400 mb-2 tracking-widest">REMEDIATION</p>
+                        <p class="text-xs sm:text-sm text-[#e6f1ff] leading-relaxed">{{ finding.recommendation }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="px-6 py-10 md:py-12 text-center">
+                <p class="text-[#4a5d7a] text-sm">NO FINDINGS RECORDED</p>
+            </div>
+            {% endif %}
+        </div>
+    </main>
 </div>
 {% endblock %}

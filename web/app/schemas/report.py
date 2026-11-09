@@ -19,6 +19,9 @@ class ReportResponse(BaseModel):
     findings_count: int
     critical_count: int
     high_count: int
+    medium_count: int = 0
+    low_count: int = 0
+    info_count: int = 0
     created_at: datetime
     completed_at: Optional[datetime] = None
     

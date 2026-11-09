@@ -45,3 +45,18 @@ outputs/*
 # OS
 .DS_Store
 Thumbs.db
+
+# Databases (never commit user data)
+*.db
+*.db-wal
+*.db-shm
+web/app.db
+
+# Generated report artifacts
+outputs/*
+!outputs/.gitkeep
+
+# Secrets
+.env
+*.env
+!.env.example

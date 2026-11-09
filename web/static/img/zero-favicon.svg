@@ -1,0 +1,5 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" fill="#000000"/>
+  <text x="32" y="38" font-family="'JetBrains Mono', monospace" font-size="18" font-weight="700" fill="#00e5ff" text-anchor="middle" letter-spacing="6">ZERO</text>
+  <line x1="16" y1="48" x2="48" y2="48" stroke="#00aaff" stroke-width="1" opacity="0.6"/>
+</svg>
